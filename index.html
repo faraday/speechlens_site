@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#faf9f6" />
+    <meta name="description" content="SpeechLens enhances speech locally on Apple Silicon with NVIDIA's RE-USE model. Hear real examples and get the native Mac app." />
+    <title>SpeechLens — Local speech enhancement for Mac</title>
+    <link rel="icon" type="image/png" href="assets/images/speechlens-logo.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner wrap">
+        <a class="brand" href="#top" aria-label="SpeechLens home">
+          <img src="assets/images/speechlens-logo.png" width="44" height="44" alt="" />
+          <span>SpeechLens</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation">
+          <span></span><span></span>
+        </button>
+        <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
+          <a href="#listen">Listen</a>
+          <a href="#the-app">The app</a>
+          <a href="#benchmarks">Benchmarks</a>
+          <a href="https://github.com/faraday/SpeechLens" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+        <a class="button button-small header-cta" href="https://github.com/faraday/SpeechLens/releases/download/v1.0/SpeechLens-1.0.dmg" target="_blank" rel="noreferrer">Download for Mac <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero wrap" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> Speech enhancement <span aria-hidden="true">·</span> Apple Silicon</p>
+          <h1 id="hero-title">Clearer speech.<br />Right on your Mac.</h1>
+          <p class="hero-description">Enhance audio and video locally with <a href="https://huggingface.co/nvidia/RE-USE" target="_blank" rel="noreferrer">NVIDIA’s RE-USE model</a>. Your audio stays on your Mac.</p>
+          <div class="hero-actions">
+            <a class="button" href="https://github.com/faraday/SpeechLens/releases/download/v1.0/SpeechLens-1.0.dmg" target="_blank" rel="noreferrer">Download for Mac <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="https://github.com/faraday/SpeechLens" target="_blank" rel="noreferrer">View on GitHub <span aria-hidden="true">↗</span></a>
+          </div>
+          <p class="compatibility"><span aria-hidden="true">◉</span> Apple Silicon <span class="dot-separator">·</span> macOS 14+</p>
+          <p class="model-note">Model weights are licensed for non-commercial research and educational use. <a href="https://huggingface.co/nvidia/RE-USE" target="_blank" rel="noreferrer">Read the model terms <span aria-hidden="true">↗</span></a></p>
+        </div>
+
+        <section class="listen-card" id="listen" aria-labelledby="listen-title">
+          <div class="listen-card-heading">
+            <div>
+              <p class="card-kicker">A real before-and-after</p>
+              <h2 id="listen-title">Hear the difference</h2>
+            </div>
+            <a class="text-link sample-credits-link" href="#sample-credits">Sample credits <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="sample-picker" role="group" aria-label="Choose a listening example">
+            <button class="sample-button is-active" type="button" data-sample="city" aria-pressed="true">Urban noise</button>
+            <button class="sample-button" type="button" data-sample="edinburgh" aria-pressed="false">Noisy speech</button>
+          </div>
+          <p class="sample-meta" id="sample-meta">CitySpeechMix <span>·</span> 10 sec <span>·</span> 44.1 kHz <span>·</span> Mono</p>
+
+          <div class="version-switch" role="group" aria-label="Choose audio version">
+            <button type="button" class="version-button is-active" data-version="before" aria-pressed="true">Original</button>
+            <button type="button" class="version-button" data-version="after" aria-pressed="false">Enhanced</button>
+          </div>
+
+          <div class="sound-display" aria-hidden="true">
+            <div class="sound-bars" id="sound-bars"></div>
+          </div>
+          <div class="player-controls">
+            <button class="play-button" id="play-button" type="button" aria-label="Play original audio">
+              <svg class="icon-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.7c0-.8.9-1.3 1.6-.9l9 5.3a2.2 2.2 0 0 1 0 3.8l-9 5.3c-.7.4-1.6-.1-1.6-.9V3.7Z" /></svg>
+              <svg class="icon-pause" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4.5c0-.8.6-1.4 1.4-1.4h1.2c.8 0 1.4.6 1.4 1.4v11c0 .8-.6 1.4-1.4 1.4H6.4c-.8 0-1.4-.6-1.4-1.4v-11Zm7 0c0-.8.6-1.4 1.4-1.4h1.2c.8 0 1.4.6 1.4 1.4v11c0 .8-.6 1.4-1.4 1.4h-1.2c-.8 0-1.4-.6-1.4-1.4v-11Z" /></svg>
+            </button>
+            <label class="visually-hidden" for="audio-seek">Seek through the sample</label>
+            <input id="audio-seek" class="seek-slider" type="range" min="0" max="10" step="0.01" value="0" />
+            <span class="time-readout" id="time-readout" aria-live="off">0:00 <span>/</span> 0:10</span>
+          </div>
+          <p class="player-hint" id="player-status" aria-live="polite">Switch versions at the same point in the recording.</p>
+          <audio id="demo-audio" preload="none"></audio>
+          <noscript><p class="noscript-note">Enable JavaScript to use the audio comparison. The original MP3 files are in this repository’s assets/audio folder.</p></noscript>
+        </section>
+      </section>
+
+      <section class="proof-points wrap" aria-label="Product details">
+        <article class="proof-item">
+          <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M9 14v-3a7 7 0 0 1 14 0v3M7 14h18v13H7z" /></svg></span>
+          <div><h2>Audio stays local</h2><p>Your media is processed on your Mac.</p></div>
+        </article>
+        <article class="proof-item">
+          <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 5v22M10 10v12M22 10v12M5 13v6M27 13v6" /></svg></span>
+          <div><h2>Native sample rate</h2><p>Preserves the input sample rate and frame count.</p></div>
+        </article>
+        <article class="proof-item">
+          <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="12" cy="16" r="8"/><circle cx="20" cy="16" r="8"/></svg></span>
+          <div><h2>Stereo stays stereo</h2><p>Preserves channel layout without downmixing.</p></div>
+        </article>
+      </section>
+
+      <section class="app-section wrap" id="the-app" aria-labelledby="app-title">
+        <div class="app-image-wrap">
+          <img src="assets/images/app-completed.png" width="838" height="1330" loading="lazy" alt="SpeechLens menu-bar app showing a completed enhancement and original/enhanced playback controls" />
+          <span class="image-caption">The SpeechLens menu-bar app</span>
+        </div>
+        <div class="app-copy">
+          <p class="eyebrow">A focused Mac utility</p>
+          <h2 id="app-title">A small app.<br />A straightforward workflow.</h2>
+          <ol class="workflow-list">
+            <li><span class="step-number">1</span><div><h3>Drop an audio or video file</h3><p>Work with common formats, including audio and video.</p></div></li>
+            <li><span class="step-number">2</span><div><h3>Enhance speech on your Mac</h3><p>Run RE-USE locally with Swift, MLX and Metal.</p></div></li>
+            <li><span class="step-number">3</span><div><h3>Compare and reveal the result</h3><p>Listen to the original and enhanced audio, then find the output in Finder.</p></div></li>
+          </ol>
+          <div class="setup-note"><p>On first launch, review the model terms and download the model.</p><a class="text-link" href="https://github.com/faraday/SpeechLens#install-the-mac-app" target="_blank" rel="noreferrer">Installation steps <span aria-hidden="true">↗</span></a></div>
+        </div>
+      </section>
+
+      <section class="benchmarks-section" id="benchmarks" aria-labelledby="bench-title">
+        <div class="wrap benchmark-inner">
+          <p class="eyebrow">Measured on Apple Silicon</p>
+          <h2 id="bench-title">Built with Swift, MLX and Metal.</h2>
+          <p class="benchmark-intro">A native Mac app and CLI, with published performance measurements and source code.</p>
+          <p class="benchmark-highlight">2.3×–6.6× real-time on tested M1 Max inputs</p>
+          <a class="text-link" href="https://github.com/faraday/SpeechLens/blob/main/docs/performance.md" target="_blank" rel="noreferrer">Read the benchmark methodology <span aria-hidden="true">↗</span></a>
+          <p class="benchmark-footnote">Release-mode streaming measurements. Enhancement timing excludes model loading and file I/O; results vary by input and Mac.</p>
+          <div class="benchmark-links"><a href="https://github.com/faraday/SpeechLens" target="_blank" rel="noreferrer">Source code <span aria-hidden="true">↗</span></a><a href="https://github.com/faraday/SpeechLens#command-line" target="_blank" rel="noreferrer">CLI guide <span aria-hidden="true">↗</span></a></div>
+        </div>
+      </section>
+
+      <section class="faq-section wrap" aria-labelledby="faq-title">
+        <div class="faq-heading"><p class="eyebrow">Good to know</p><h2 id="faq-title">A few practical details.</h2></div>
+        <div class="faq-list">
+          <details id="mac-requirements"><summary>What does SpeechLens need?</summary><p>SpeechLens runs on Apple Silicon with macOS 14 or newer. On first launch, the app asks you to review the model terms and downloads the separate model weights.</p></details>
+          <details id="model-license"><summary>Can I use the model commercially?</summary><p>The SpeechLens source code is Apache-2.0. The separately licensed NVIDIA RE-USE weights are limited to non-commercial research and educational use. Review the <a href="https://huggingface.co/nvidia/RE-USE" target="_blank" rel="noreferrer">upstream model terms</a> and the <a href="https://github.com/faraday/SpeechLens/blob/main/docs/model-artifacts.md#licensing" target="_blank" rel="noreferrer">SpeechLens artifact notes</a> before using the weights.</p></details>
+          <details id="audio-privacy"><summary>Does my audio leave my Mac?</summary><p>Audio and video media are processed locally and are not uploaded. The app has separate, consent-based reliability and performance diagnostics; they do not include audio, filenames or paths. <a href="https://github.com/faraday/SpeechLens/blob/main/docs/telemetry.md" target="_blank" rel="noreferrer">Read the privacy details</a>.</p></details>
+          <details id="cli"><summary>Can I use it from scripts?</summary><p>Yes. SpeechLens also provides a command-line interface for scripted enhancement. See the <a href="https://github.com/faraday/SpeechLens#command-line" target="_blank" rel="noreferrer">CLI instructions</a> in the repository.</p></details>
+        </div>
+      </section>
+
+      <section class="credits-section wrap" id="sample-credits" aria-labelledby="credits-title">
+        <details class="credits-details">
+          <summary id="credits-title">Listening sample credits</summary>
+          <div class="credits-copy">
+            <p><strong>CitySpeechMix urban noise.</strong> Modan Tailleur, Mathieu Lagrange, Pierre Aumond and Vincent Tourre (2025), <em>CitySpeechMix: A Simulated Dataset of Speech and Urban Sound Mixtures from LibriSpeech and SONYC-UST</em>. <a href="https://doi.org/10.5281/zenodo.15405950" target="_blank" rel="noreferrer">DOI 10.5281/zenodo.15405950</a>. CC BY 4.0. The enhanced sample was processed with SpeechLens; both listening files were encoded to MP3.</p>
+            <p><strong>Edinburgh noisy speech.</strong> Cassia Valentini-Botinhao (2017), <em>Noisy speech database for training speech enhancement algorithms and TTS models, 2016 [sound]</em>, University of Edinburgh DataShare. <a href="https://doi.org/10.7488/ds/2117" target="_blank" rel="noreferrer">DOI 10.7488/ds/2117</a>. CC BY 4.0. The enhanced sample was processed with SpeechLens; both listening files were encoded to MP3.</p>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-main">
+        <a class="brand footer-brand" href="#top"><img src="assets/images/speechlens-logo.png" width="34" height="34" alt="" /><span>SpeechLens</span></a>
+        <div class="footer-links"><a href="#mac-requirements">Requirements</a><a href="#model-license">Model terms</a><a href="#audio-privacy">Audio privacy</a><a href="#cli">CLI</a></div>
+        <div class="footer-credit"><span>Made by Çağatay Çallı</span><span><a href="https://github.com/faraday/SpeechLens/blob/main/LICENSE" target="_blank" rel="noreferrer">Source: Apache-2.0</a> <span aria-hidden="true">·</span> <a href="#sample-credits">Audio credits</a></span></div>
+      </div>
+      <p class="prototype-note">Interactive design prototype · no website analytics are active</p>
+    </footer>
+  </body>
+</html>
