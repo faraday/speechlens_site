@@ -5,9 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#faf9f6" />
     <meta name="description" content="SpeechLens enhances speech locally on Apple Silicon with NVIDIA's RE-USE model. Hear real examples and get the native Mac app." />
+    <link rel="canonical" href="https://speechlens.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SpeechLens" />
+    <meta property="og:url" content="https://speechlens.app/" />
+    <meta property="og:title" content="SpeechLens — Local speech enhancement for Mac" />
+    <meta property="og:description" content="SpeechLens enhances speech locally on Apple Silicon. Hear before-and-after samples and get the native Mac app." />
+    <meta property="og:image" content="https://speechlens.app/assets/images/social-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SpeechLens on a Mac, with the headline Clearer speech. Right on your Mac." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SpeechLens — Local speech enhancement for Mac" />
+    <meta name="twitter:description" content="SpeechLens enhances speech locally on Apple Silicon. Hear before-and-after samples and get the native Mac app." />
+    <meta name="twitter:image" content="https://speechlens.app/assets/images/social-preview.png" />
     <title>SpeechLens — Local speech enhancement for Mac</title>
     <link rel="icon" type="image/png" href="assets/images/speechlens-logo.png" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="assets/audio/waveforms.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -42,7 +57,7 @@
             <a class="button" href="https://github.com/faraday/SpeechLens/releases/download/v1.0/SpeechLens-1.0.dmg" target="_blank" rel="noreferrer">Download for Mac <span aria-hidden="true">↗</span></a>
             <a class="button button-secondary" href="https://github.com/faraday/SpeechLens" target="_blank" rel="noreferrer">View on GitHub <span aria-hidden="true">↗</span></a>
           </div>
-          <p class="compatibility"><span aria-hidden="true">◉</span> Apple Silicon <span class="dot-separator">·</span> macOS 14+</p>
+          <p class="compatibility"><span aria-hidden="true">◉</span> Apple Silicon <span class="dot-separator">·</span> macOS 14+ <span class="dot-separator">·</span> Signed and notarized for macOS</p>
           <p class="model-note">Model weights are licensed for non-commercial research and educational use. <a href="https://huggingface.co/nvidia/RE-USE" target="_blank" rel="noreferrer">Read the model terms <span aria-hidden="true">↗</span></a></p>
         </div>
 
@@ -54,15 +69,15 @@
             </div>
             <a class="text-link sample-credits-link" href="#sample-credits">Sample credits <span aria-hidden="true">↗</span></a>
           </div>
-          <div class="sample-picker" role="group" aria-label="Choose a listening example">
-            <button class="sample-button is-active" type="button" data-sample="city" aria-pressed="true">Urban noise</button>
-            <button class="sample-button" type="button" data-sample="edinburgh" aria-pressed="false">Noisy speech</button>
+          <div class="sample-picker" role="radiogroup" aria-label="Choose a listening example">
+            <button class="sample-button is-active" type="button" role="radio" data-sample="city" aria-checked="true" tabindex="0">Urban noise</button>
+            <button class="sample-button" type="button" role="radio" data-sample="edinburgh" aria-checked="false" tabindex="-1">Noisy speech</button>
           </div>
           <p class="sample-meta" id="sample-meta">CitySpeechMix <span>·</span> 10 sec <span>·</span> 44.1 kHz <span>·</span> Mono</p>
 
-          <div class="version-switch" role="group" aria-label="Choose audio version">
-            <button type="button" class="version-button is-active" data-version="before" aria-pressed="true">Original</button>
-            <button type="button" class="version-button" data-version="after" aria-pressed="false">Enhanced</button>
+          <div class="version-switch" role="radiogroup" aria-label="Choose audio version">
+            <button type="button" class="version-button is-active" role="radio" data-version="before" aria-checked="true" tabindex="0">Original</button>
+            <button type="button" class="version-button" role="radio" data-version="after" aria-checked="false" tabindex="-1">Enhanced</button>
           </div>
 
           <div class="sound-display" aria-hidden="true">
@@ -154,7 +169,7 @@
         <div class="footer-links"><a href="#mac-requirements">Requirements</a><a href="#model-license">Model terms</a><a href="#audio-privacy">Audio privacy</a><a href="#cli">CLI</a></div>
         <div class="footer-credit"><span>Made by Çağatay Çallı</span><span><a href="https://github.com/faraday/SpeechLens/blob/main/LICENSE" target="_blank" rel="noreferrer">Source: Apache-2.0</a> <span aria-hidden="true">·</span> <a href="#sample-credits">Audio credits</a></span></div>
       </div>
-      <p class="prototype-note">Interactive design prototype · no website analytics are active</p>
+      <p class="footer-note">No website analytics are active.</p>
     </footer>
   </body>
 </html>

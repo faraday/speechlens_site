@@ -26,6 +26,7 @@
   const sampleMeta = document.querySelector("#sample-meta");
   const status = document.querySelector("#player-status");
   const bars = document.querySelector("#sound-bars");
+  const waveforms = window.SpeechLensWaveforms;
   const sampleButtons = [...document.querySelectorAll("[data-sample]")];
   const versionButtons = [...document.querySelectorAll("[data-version]")];
 
@@ -35,16 +36,42 @@
   let playIntent = false;
   let queuedSeek = 0;
 
-  // This quiet, abstract meter is decorative. The range control below is the
-  // actual playback timeline; these bars are not presented as measured audio.
-  const barHeights = [24, 34, 47, 30, 41, 52, 26, 37, 48, 31, 44, 25, 54, 38, 30, 47, 35, 56, 27, 42, 32, 49, 24, 40, 52, 34, 46, 29, 55, 37, 25, 44, 51, 31, 40, 28, 48, 34, 54, 26, 43, 32, 50, 39, 27, 46, 35, 53, 29, 41, 24, 49, 34, 57, 28, 45, 32, 51, 37, 25, 47, 34, 53, 29];
-  const barsFragment = document.createDocumentFragment();
-  barHeights.forEach((height) => {
-    const bar = document.createElement("i");
-    bar.style.height = `${height}px`;
-    barsFragment.append(bar);
-  });
-  bars.append(barsFragment);
+  function renderWaveform() {
+    const fragment = document.createDocumentFragment();
+    waveforms[selectedSample][selectedVersion].forEach((height) => {
+      const bar = document.createElement("i");
+      bar.style.height = `${height}px`;
+      fragment.append(bar);
+    });
+    bars.replaceChildren(fragment);
+  }
+
+  function setRadioSelection(buttons, selectedButton) {
+    buttons.forEach((button) => {
+      const active = button === selectedButton;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-checked", String(active));
+      button.tabIndex = active ? 0 : -1;
+    });
+  }
+
+  function addRadioKeyboardControls(buttons) {
+    buttons.forEach((button, index) => {
+      button.addEventListener("keydown", (event) => {
+        let nextIndex;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % buttons.length;
+        else if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + buttons.length) % buttons.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = buttons.length - 1;
+        else return;
+        event.preventDefault();
+        buttons[nextIndex].focus();
+        buttons[nextIndex].click();
+      });
+    });
+  }
+
+  renderWaveform();
 
   function formatTime(seconds) {
     if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
@@ -119,17 +146,10 @@
       audio.load();
       assignedSource = "";
       queuedSeek = 0;
-      sampleButtons.forEach((item) => {
-        const active = item === button;
-        item.classList.toggle("is-active", active);
-        item.setAttribute("aria-pressed", String(active));
-      });
-      versionButtons.forEach((item) => {
-        const active = item.dataset.version === selectedVersion;
-        item.classList.toggle("is-active", active);
-        item.setAttribute("aria-pressed", String(active));
-      });
+      setRadioSelection(sampleButtons, button);
+      setRadioSelection(versionButtons, versionButtons.find((item) => item.dataset.version === selectedVersion));
       sampleMeta.innerHTML = samples[selectedSample].metadata;
+      renderWaveform();
       updateTime(0, samples[selectedSample].duration);
       updatePlayState();
       setStatus("Switch versions at the same point in the recording.");
@@ -141,11 +161,8 @@
       const nextVersion = button.dataset.version;
       if (nextVersion === selectedVersion) return;
       selectedVersion = nextVersion;
-      versionButtons.forEach((item) => {
-        const active = item === button;
-        item.classList.toggle("is-active", active);
-        item.setAttribute("aria-pressed", String(active));
-      });
+      setRadioSelection(versionButtons, button);
+      renderWaveform();
       updatePlayState();
       if (assignedSource) {
         const wasPlaying = playIntent && !audio.paused;
@@ -156,6 +173,9 @@
       }
     });
   });
+
+  addRadioKeyboardControls(sampleButtons);
+  addRadioKeyboardControls(versionButtons);
 
   playButton.addEventListener("click", () => {
     if (playIntent && !audio.paused) {
@@ -223,4 +243,28 @@
       nav.classList.remove("is-open");
     });
   });
+
+  function revealHashDisclosure() {
+    let id;
+    try { id = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    const disclosure = target.matches("details")
+      ? target
+      : target.closest("details") || target.querySelector("details");
+    if (!disclosure) return;
+    disclosure.open = true;
+    disclosure.querySelector("summary")?.focus({ preventScroll: true });
+  }
+
+  window.addEventListener("hashchange", revealHashDisclosure);
+  document.addEventListener("click", (event) => {
+    const clicked = event.target instanceof Element ? event.target.closest("a[href^='#']") : null;
+    if (!clicked) return;
+    const destination = new URL(clicked.href, window.location.href);
+    const samePage = destination.origin === window.location.origin && destination.pathname === window.location.pathname;
+    if (samePage && destination.hash === window.location.hash) window.requestAnimationFrame(revealHashDisclosure);
+  });
+  revealHashDisclosure();
 })();
